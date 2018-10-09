@@ -35,7 +35,7 @@ class WiFiConnector
     void handleRestart();
     void serveContent(String content);
     bool _activeAP;
-    char _macAddr[16];
+    char _macAddr[12];
     String _htmlContent;
     ESP8266WebServer _server;
 };

@@ -21,7 +21,7 @@ WiFiConnector::WiFiConnector() {
   _server.begin();
 
   // Configure our access point name
-  String macAddress = "DOM-" + WiFi.softAPmacAddress();
+  String macAddress = WiFi.softAPmacAddress();
   macAddress.replace(":", "");
   for(unsigned int x = 0; x<=macAddress.length(); x++) {
     _macAddr[x] = macAddress.charAt(x);
