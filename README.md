@@ -8,12 +8,18 @@ The access point will present itself as the MAC address of the device and a brow
 
 Clone or submodule the library into the lib folder of your project. You can use the library as a submodule with the command:
 
+```
 git submodule add https://github.com/barnsleyskunkworks/wifi-connector WiFiConnector
 git commit -m "Added WiFiConnector submodule"
+```
+
+To subsequently update the submodule:
+
+`git submodule update --init --recursive`
 
 Examples usage:
 
-'''c
+```c
 #include <WiFiConnector.h>
 
 WiFiConnector wifiConnector;
@@ -22,4 +28,4 @@ wifiConnector.connectWiFi();
 if (wifiConnector.isConnected()) {
   wifiConnector.handleClient();
 }
-'''
+```
