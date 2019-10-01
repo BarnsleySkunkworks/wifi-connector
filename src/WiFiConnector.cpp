@@ -32,6 +32,16 @@ WiFiConnector::WiFiConnector() {
   EEPROM.get(0, credentials);
 }
 
+// Compile a HTML template from PageTemplate.cpp and our title and 
+// content parameters, then push it out to the client
+void WiFiConnector::serveContent(String title) {
+  String pageContent = FPSTR(_HTMLPage);
+  pageContent.replace("{{pageTitle}}", title);
+  pageContent.replace("{{pageContent}}", _htmlContent);
+  Serial.println("Sending...");
+  _server.send(200, "text/html", pageContent);
+}
+
 // Launch an access point so we can configure the device from the browser
 // We might want to specify Wi-Fi settings for examples
 void WiFiConnector::openAccessPoint() {
@@ -51,7 +61,6 @@ void WiFiConnector::closeAccessPoint() {
   }
 }
 
-
 void WiFiConnector::disconnectWiFi() {
   Serial.printf("Disconnecting WiFi\n");
   WiFi.disconnect(true);
@@ -65,11 +74,12 @@ void WiFiConnector::connectWiFi() {
     WiFi.mode(WIFI_STA);
     WiFi.hostname(credentials.name);
     WiFi.begin(credentials.ssid, credentials.pass);
-    for (int x=0; x<=60; x++) { // Try to connect for up to a minute
+    for (int x=0; x<=15; x++) { // Try to connect for up to 15 seconds
       if (WiFi.status() == WL_CONNECTED) { break; }
+      delay(1000);
     }
   } else {
-    Serial.printf("Cannot connect to Wi-Fi. No SSID provided\n");
+    Serial.printf("\nCannot connect to Wi-Fi. No SSID provided\n");
   }
   
   // Handle based on connection status
@@ -165,13 +175,4 @@ void WiFiConnector::handleRestart() {
     delay(3000); // to give time to return the page to the client
     ESP.restart(); // TODO: Prevent the watchdog timeout causing a restart too.
   }
-}
-
-// Compile a HTML template from PageTemplate.cpp and our title and 
-// content parameters, then push it out to the client
-void WiFiConnector::serveContent(String title) {
-  String pageContent = _HTMLPage;
-  pageContent.replace("{{pageTitle}}", title);
-  pageContent.replace("{{pageContent}}", _htmlContent);
-  _server.send(200, "text/html", pageContent);
 }
