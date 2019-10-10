@@ -23,6 +23,8 @@ class WiFiConnector
     void disconnectWiFi();
     void handleClient();
     bool isConnected();
+    bool isDisconnected();
+    bool hasOpenAccessPoint();
     struct EEPROMData { // to hold device settings
       char ssid[33]; //32 max allowed + 1 for the terminating null
       char pass[64]; //63 max allowed + 1

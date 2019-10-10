@@ -42,6 +42,9 @@ void WiFiConnector::serveContent(String title) {
   _server.send(200, "text/html", pageContent);
 }
 
+
+
+
 // Launch an access point so we can configure the device from the browser
 // We might want to specify Wi-Fi settings for examples
 void WiFiConnector::openAccessPoint() {
@@ -83,12 +86,12 @@ void WiFiConnector::connectWiFi() {
   }
   
   // Handle based on connection status
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.printf("Status code %d\n", WiFi.status());
-    openAccessPoint();
-  } else {
+  if (WiFi.status() == WL_CONNECTED) {
     closeAccessPoint();
   }
+
+  Serial.print("WiFi status code is ");
+  Serial.println(WiFi.status());
 }
 
 void WiFiConnector::handleClient() {
@@ -97,6 +100,14 @@ void WiFiConnector::handleClient() {
 
 bool WiFiConnector::isConnected() {
   return (WiFi.status() == WL_CONNECTED);
+}
+
+bool WiFiConnector::isDisconnected() {
+  return (WiFi.status() == WL_DISCONNECTED);
+}
+
+bool WiFiConnector::hasOpenAccessPoint() {
+  return (_activeAP);
 }
 
 void WiFiConnector::handleRoot() {
